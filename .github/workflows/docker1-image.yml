@@ -2,9 +2,9 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
   pull_request:
-    branches: [ main ]
+    branches: [ master ]
 
 jobs:
 
@@ -15,4 +15,14 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+      env:
+        USER: ${{ secrets.USER }}
+        PASS: ${{ secrets.PASS }}    
+      run: |
+       echo $USER
+       echo $PASS
+       docker build . --file Dockerfile --tag charchit1/github:latest
+       docker login -u $USER -p $PASS
+       
+       docker push charchit1/github:latest
+
